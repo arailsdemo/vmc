@@ -1,26 +1,19 @@
-require 'faraday_middleware'
+require 'vmc/client/authentication'
+require 'vmc/client/connection'
+require 'vmc/client/errors'
+require 'vmc/client/request'
 
 module VMC
   class Client
-    class TargetError < RuntimeError; end
+    attr_accessor :http_adapter, :target_url
 
-    attr_accessor :auth_token
-    attr_reader :user
-
-    def login(username, password)
-      connection = Faraday.new(:url => 'http://api.vcap.me') do |builder|
-        builder.use Faraday::Request::JSON
-        builder.use Faraday::Response::Rashify
-        builder.use Faraday::Response::ParseJson
-
-        builder.adapter :net_http
-      end
-
-      response = connection.post("/users/#{username}/tokens", :password => password).body
-
-      raise TargetError if response.code == 200
-      @user = username
-      @auth_token = response.token
+    def initialize
+      @target_url = VMC::DEFAULT_LOCAL_TARGET
+      @http_adapter = :net_http
     end
+
+    include Authentication
+    include Connection
+    include Request
   end
 end
