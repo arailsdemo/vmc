@@ -12,6 +12,7 @@ module VMC
       private
 
       def request(action, path, options)
+        check_login_status if options[:require_auth]
         headers = auth_token ? { 'AUTHORIZATION' => auth_token } : {}
         headers.merge!(options[:headers]) if options[:headers]
 
@@ -21,6 +22,10 @@ module VMC
         end
 
         response.body
+      end
+
+      def check_login_status
+        raise AuthError unless logged_in? || auth_token_valid?
       end
     end
   end

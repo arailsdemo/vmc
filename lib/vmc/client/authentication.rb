@@ -12,6 +12,20 @@ module VMC
         @user = username
         @auth_token = response.token
       end
+
+      def auth_token_valid?
+        descr = info
+        if descr
+          return false unless descr[:user]
+          return false unless descr[:usage]
+          @user = descr[:user]
+          true
+        end
+      end
+
+      def logged_in?
+        user
+      end
     end
   end
 end
