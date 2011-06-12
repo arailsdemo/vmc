@@ -1,5 +1,5 @@
 require "vmc/version"
+require 'vmc/client'
 
 module Vmc
-  # Your code goes here...
 end
