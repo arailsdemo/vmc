@@ -1,5 +1,6 @@
 require "vmc/version"
 require 'vmc/client'
+require 'vmc/cli'
 
 module VMC
   APPS_PATH            = '/apps'
