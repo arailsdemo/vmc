@@ -40,6 +40,21 @@ describe VMC::Cli do
        results = capture(:stdout) { login }
        results.should =~ /Attempting to login./
       end
+
+      context "and login will succeed" do
+        it "saves the token via Config and displays a success message" do
+          client = double(VMC::Client)
+          client.should_receive(:login).with('foo@bar.com', 'sekret') { 'token' }
+          VMC::Client.stub(:new) { client }
+
+          config = double(VMC::Cli::Config)
+          config.should_receive(:update).with(:tokens, 'token')
+          VMC::Cli::Config.stub(:new) { config }
+
+          results = capture(:stdout) { login }
+          results.should =~ /Login successful./
+        end
+      end
     end
   end
 end
