@@ -2,10 +2,17 @@ require 'spec_helper'
 
 describe VMC::Cli do
   describe "#login" do
+    def stub_login_and_update_setting
+      mock_client.should_receive(:login).
+                  with('foo@bar.com', 'sekret') { 'token' }
+      mock_config.should_receive(:update).with(:tokens, 'token')
+    end
+
     context "when credentials are not provided" do
       let(:login) { VMC::Cli.start(["login"]) }
 
       it "asks for an email and password" do
+        stub_login_and_update_setting
         $stdin.should_receive(:gets).and_return('foo@bar.com', 'sekret')
         results = capture(:stdout) { login }
         results.should =~ /Please enter your email:/
@@ -36,21 +43,15 @@ describe VMC::Cli do
       end
 
       it "does not ask for email or password" do
-       $stdin.should_not_receive(:gets)
-       results = capture(:stdout) { login }
-       results.should =~ /Attempting to login./
+        stub_login_and_update_setting
+        $stdin.should_not_receive(:gets)
+        results = capture(:stdout) { login }
+        results.should =~ /Attempting to login./
       end
 
       context "and login will succeed" do
         it "saves the token via Config and displays a success message" do
-          client = double(VMC::Client)
-          client.should_receive(:login).with('foo@bar.com', 'sekret') { 'token' }
-          VMC::Client.stub(:new) { client }
-
-          config = double(VMC::Cli::Config)
-          config.should_receive(:update).with(:tokens, 'token')
-          VMC::Cli::Config.stub(:new) { config }
-
+          stub_login_and_update_setting
           results = capture(:stdout) { login }
           results.should =~ /Login successful./
         end

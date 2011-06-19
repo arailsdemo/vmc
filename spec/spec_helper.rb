@@ -32,3 +32,15 @@ def capture(stream)
 
   result
 end
+
+def mock_client(stubs={})
+  client = double(VMC::Client, stubs)
+  VMC::Client.stub(:new) { client }
+  client
+end
+
+def mock_config(stubs={})
+  config = double(VMC::Cli::Config, stubs)
+  VMC::Cli::Config.stub(:new) { config }
+  config
+end

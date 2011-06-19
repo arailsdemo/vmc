@@ -8,13 +8,10 @@ module VMC
     def login
       email = options[:email] || get_option(:email)
       password = options[:password] || get_option(:password)
-      say "Attempting to login."
+      say "Attempting to login.", :yellow
 
-      client = VMC::Client.new
       token = client.login(email, password)
-      say "Login successful."
-
-      config = VMC::Cli::Config.new
+      say "Login successful.", :green
       config.update(:tokens, token)
     end
 
