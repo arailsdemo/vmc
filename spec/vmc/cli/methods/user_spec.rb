@@ -5,7 +5,7 @@ describe VMC::Cli do
     def stub_login_and_update_setting
       mock_client.should_receive(:login).
                   with('foo@bar.com', 'sekret') { 'token' }
-      mock_config.should_receive(:update).with(:tokens, 'token')
+      mock_config(:target => "target").should_receive(:update).with(:tokens, 'token')
     end
 
     context "when credentials are not provided" do

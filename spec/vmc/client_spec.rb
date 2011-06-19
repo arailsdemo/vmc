@@ -1,6 +1,15 @@
 require "spec_helper"
 
 describe VMC::Client do
+  describe "#initialize" do
+    it "can set the auth_token, app_name and target_url" do
+      client = VMC::Client.new(:auth_token => 'token', :app_name => 'foo', :target_url => 'bar')
+      client.auth_token.should == 'token'
+      client.app_name.should == 'foo'
+      client.target_url.should == 'bar'
+    end
+  end
+
   describe "#login" do
     def login
       @client = subject

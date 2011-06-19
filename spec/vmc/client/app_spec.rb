@@ -9,7 +9,7 @@ describe VMC::Client::App do
           with(:headers => {'AUTHORIZATION' => 'token'}).
           to_return(fixture('app_info.txt'))
 
-      client = VMC::Client.new('token', 'my_app')
+      client = VMC::Client.new(:auth_token => 'token', :app_name => 'my_app')
 
       client.app_info.resources.memory.should == 64
     end
@@ -20,7 +20,7 @@ describe VMC::Client::App do
           with(:headers => {'AUTHORIZATION' => 'valid_auth_token'}).
           to_return(fixture('app_info.txt'))
 
-      client = VMC::Client.new(nil, 'my_app')
+      client = VMC::Client.new(:app_name => 'my_app')
       client.login('foo@example.com', 'foo')
 
       client.app_info.resources.memory.should == 64
@@ -31,7 +31,7 @@ describe VMC::Client::App do
       stub_request(:get, "http://api.vcap.me/info").
           to_return(fixture('info_returned.txt'))
 
-      client = VMC::Client.new(nil, 'my_app')
+      client = VMC::Client.new(:app_name => 'my_app')
       expect { client.app_info }.to raise_error VMC::Client::AuthError
     end
   end

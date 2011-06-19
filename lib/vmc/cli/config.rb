@@ -7,8 +7,8 @@ module VMC
 
       def initialize(options={})
         @settings_path = File.expand_path(VMC::DEFAULT_CONFIG_PATH)
-        @target = options[:target] || VMC::DEFAULT_LOCAL_TARGET
         @config_hash = load_settings || {}
+        @target = options[:target] || config_hash["target"] || VMC::DEFAULT_LOCAL_TARGET
       end
 
       def email

@@ -7,7 +7,7 @@ describe VMC::Client::Info do
               with(:headers => {'AUTHORIZATION' => 'token'}).
               to_return(fixture('info_authenticated.txt'))
 
-      client = VMC::Client.new('token')
+      client = VMC::Client.new(:auth_token => 'token')
       info = client.info
 
       info.support.should == "ac-support@vmware.com"

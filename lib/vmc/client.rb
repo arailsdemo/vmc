@@ -9,11 +9,10 @@ module VMC
   class Client
     attr_accessor :app_name, :http_adapter, :target_url
 
-    def initialize(auth_token=nil, app_name=nil)
-      @auth_token = auth_token
-      @app_name = app_name
-
-      @target_url = VMC::DEFAULT_LOCAL_TARGET
+    def initialize(options={})
+      @auth_token = options[:auth_token]
+      @app_name = options[:app_name]
+      @target_url = options[:target_url] || VMC::DEFAULT_LOCAL_TARGET
       @http_adapter = :net_http
     end
 
