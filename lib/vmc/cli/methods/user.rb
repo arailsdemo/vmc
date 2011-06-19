@@ -13,6 +13,8 @@ module VMC
       token = client.login(email, password)
       say "Login successful.", :green
       config.update(:tokens, token)
+    rescue VMC::Client::TargetError
+      say "Login failed.", :red
     end
 
     protected

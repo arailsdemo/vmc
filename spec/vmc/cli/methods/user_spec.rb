@@ -56,6 +56,15 @@ describe VMC::Cli do
           results.should =~ /Login successful./
         end
       end
+
+      context "and login will fail" do
+        it "displays a failed message" do
+          mock_client.should_receive(:login).
+                      with('foo@bar.com', 'sekret') { raise VMC::Client::TargetError  }
+          results = capture(:stdout) { login }
+          results.should =~ /Login failed./
+        end
+      end
     end
   end
 end
