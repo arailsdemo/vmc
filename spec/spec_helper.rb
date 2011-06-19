@@ -16,3 +16,19 @@ def stub_login(status)
           with(:body => {:password => 'foo'}).
           to_return(fixture(fixture_file))
 end
+
+$0 = "vmc"
+ARGV.clear
+
+def capture(stream)
+  begin
+    stream = stream.to_s
+    eval "$#{stream} = StringIO.new"
+    yield
+    result = eval("$#{stream}").string
+  ensure
+    eval("$#{stream} = #{stream.upcase}")
+  end
+
+  result
+end
